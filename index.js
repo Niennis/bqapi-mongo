@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const config = require('./config');
 const authMiddleware = require('./middleware/auth');
 const errorHandler = require('./middleware/error');
@@ -8,7 +9,11 @@ const pkg = require('./package.json');
 const { port, dbUrl, secret } = config;
 const app = express();
 
-// TODO: Conección a la BD en mogodb
+// TODO: Conección a la BD en mongodb
+mongoose.connect(dbUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 app.set('config', config);
 app.set('pkg', pkg);

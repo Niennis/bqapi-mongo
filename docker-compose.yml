@@ -17,7 +17,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8080
-      - DB_URL=mongodb://root:example@db:27017/?authSource=admin
+      - DB_URL=mongodb://db:27017/bq # CONNECTION STRING root:example@db:27017/?authSource=admin 
     env_file:
       - secrets.env # los _secrets_ a incluir como variables de entorno. Usa el archivo `sample.secrets.env` como guia
     volumes:
