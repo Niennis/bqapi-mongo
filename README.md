@@ -17,7 +17,7 @@ sistema a través del cual puedan tomar pedidos usando una _tablet_, y enviarlos
 a la cocina para que se preparen ordenada y eficientemente.
 
 Este proyecto tiene dos áreas: interfaz (cliente) y API (servidor). Nuestra
-clienta nos ha solicitado desarrollar la API que se debe integra con la
+clienta nos ha solicitado desarrollar la API que se debe integrar con la
 interfaz,  que otro equipo de desarrolladoras está trabajando
 simultáneamente
 
