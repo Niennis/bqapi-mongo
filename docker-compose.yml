@@ -1,9 +1,13 @@
 version: "3"
 services:
   db:
-    # TODO: configura tu imagen de base de datos, te recomendamos una de las sgtes:
-    # https://hub.docker.com/_/mysql
-    # https://hub.docker.com/_/mongo
+    image: "mongo:4"
+    restart: always
+    volumes:
+      - ./db-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
     networks:
       - private
   node:
@@ -13,7 +17,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8080
-      - DB_URL=<CONNECTION STRING>
+      - DB_URL=mongodb://root:example@db:27017/?authSource=admin
     env_file:
       - secrets.env # los _secrets_ a incluir como variables de entorno. Usa el archivo `sample.secrets.env` como guia
     volumes:
