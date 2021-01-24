@@ -18,7 +18,7 @@ a la cocina para que se preparen ordenada y eficientemente.
 
 Este proyecto tiene dos áreas: interfaz (cliente) y API (servidor). Nuestra
 clienta nos ha solicitado desarrollar la API que se debe integrar con la
-interfaz,  que otro equipo de desarrolladoras está trabajando
+interfaz, que otro equipo de desarrolladoras está trabajando
 simultáneamente
 
 ## 2. Resumen del proyecto
@@ -240,9 +240,9 @@ Nuestra aplicación usa las siguientes variables de entorno:
   podemos usar la variable de entorno `PORT` para especificar el puerto. Valor
   por defecto `8080`.
 * `DB_URL`: El _string_ de conexión de _MongoDB_ o _MySQL_. Cuando ejecutemos la
-  aplicación en nuestra computadora (en entorno de desarrollo), podemos usar el
+  aplicación en nuestra computadora (en entorno de desarrollo), podemos usar
   una base de datos local, pero en producción deberemos utilizar las instancias
-  configuradas con `docker-compose` (mas sobre esto en la siguiente sección de
+  configuradas con `docker-compose` (más sobre esto en la siguiente sección de
   **Deployment**)
 * `JWT_SECRET`: Nuestra aplicación implementa autenticación usando JWT (JSON
    Web Tokens). Para poder firmar (cifrar) y verificar (descifrar) los tokens,
