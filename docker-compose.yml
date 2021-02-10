@@ -1,7 +1,7 @@
 version: "3"
 services:
   db:
-    image: "mongo:4"
+    image: "mongo"
     restart: always
     volumes:
       - ./db-data:/data/db
@@ -9,7 +9,10 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
     networks:
+      - public
       - private
+    ports:
+      - "27017:27017"
   node:
     image: "node:10" # https://hub.docker.com/_/node/
     user: "node"
@@ -17,7 +20,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8080
-      - DB_URL=mongodb://db:27017/bq # CONNECTION STRING root:example@db:27017/?authSource=admin 
+      - DB_URL=mongodb://root:example@db:27017/?authSource=admin # CONNECTION STRING root:example@db:27017/?authSource=admin  mongodb://db:27017/bq
     env_file:
       - secrets.env # los _secrets_ a incluir como variables de entorno. Usa el archivo `sample.secrets.env` como guia
     volumes:
