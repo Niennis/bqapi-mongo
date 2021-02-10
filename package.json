@@ -32,7 +32,8 @@
     "jest": "24.9.0",
     "jsdoc": "3.6.3",
     "jsdoc-http-plugin": "0.3.1",
-    "node-fetch": "2.6.0",
-    "tree-kill": "1.2.1"
+    "node-fetch": "^2.6.1",
+    "nodemon": "^2.0.7",
+    "tree-kill": "^1.2.2"
   }
 }
