@@ -13,8 +13,11 @@ const app = express();
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+})
+.then((db) => console.log('connected to db'))
+.catch(console.error)
 
+mongoose.set('useFindAndModify', false)
 app.set('config', config);
 app.set('pkg', pkg);
 
