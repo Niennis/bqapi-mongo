@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { isAdmin } = require('../middleware/auth')
 
 module.exports = {
   // GETTING USERS
@@ -40,10 +42,9 @@ module.exports = {
   // GET ONE USER BY EMAIL OR ID
   getUserByIdOrEmail: async (req, resp, next) => {
     const uid = req.params.uid;
-    console.log(uid)
 
     const { authorization } = req.headers;
-    console.log('AUTHO', authorization)
+    // console.log('AUTHO', authorization)
     if (!authorization) {
       return next(401);
     }
@@ -107,13 +108,53 @@ module.exports = {
       }
     })
     next()
-  }
+  },
 
   // UPDATE AN EXISTING USER
+  updateUser: async (req, resp, next) => {
+    const uidToUpdate = req.params.uid;
+    const { email, password, roles } = req.body
+    const { authorization } = req.headers;
 
+    const [type, token] = authorization.split(' ');
+    const decodedToken = jwt.decode(token, { complete: true });
+    const uid = decodedToken.payload.uid
 
-  
+    const user = await User.findOne(getIdOrEmail(uidToUpdate)).exec();
+
+    if (!isAdmin(req) && (uid !== user.id)) {
+      console.log('hola')
+      return next(403)
+    }
+
+    if ((uid === user.id) && req.body.roles) {
+      console.log('chao')
+      return next(403)
+    }
+
+    if(!email && !password && !roles){
+      console.log('holichao')
+      return next(400)
+    }
+
+    user.password = bcrypt.hashSync(password, 10) || user.password;
+    user.email = email || user.email;
+    user.roles = roles || user.roles
+    user.save()
+
+    return resp.json({
+      id: user._id,
+      email: user.email,
+      roles: user.roles,
+      admin: user.roles.get('admin')
+    })
+
+  },
+
   // DELETE AN USER
+  deleteUser: async (req, resp, next) => {
+
+  }
 };
 
 // IDENTIFY IF INPUT IS EMAIL OR ID

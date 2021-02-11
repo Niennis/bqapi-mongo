@@ -10,6 +10,7 @@ const {
   getUsers,
   getUserByIdOrEmail,
   createNewUser,
+  updateUser,
 } = require('../controller/users');
 
 
@@ -165,6 +166,7 @@ module.exports = (app, next) => {
    * @code {404} si la usuaria solicitada no existe
    */
   app.put('/users/:uid', requireAuth, (req, resp, next) => {
+    updateUser(req, resp, next)
   });
 
   /**
