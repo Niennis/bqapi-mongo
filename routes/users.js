@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const User = require('../models/User');
 
 const {
   requireAuth,
@@ -7,6 +8,8 @@ const {
 
 const {
   getUsers,
+  getUserByIdOrEmail,
+  createNewUser,
 } = require('../controller/users');
 
 
@@ -23,7 +26,26 @@ const initAdminUser = (app, next) => {
   };
 
   // TODO: crear usuaria admin
-  next();
+
+  User.findOne({ email: adminEmail })
+    .then(user => (  // si es null, queremos crear al usuario, si no, queremos comprobar que la contraseña es válida
+      (!user)
+        ? User.create(adminUser) // crear usuario
+        : bcrypt.compare(adminPassword, user.password)  // validar contraseña
+          .then((res) => {
+            if (res) {
+              // console.log('YES!', res)
+              return
+            }
+            return user.save(adminUser)
+          })
+    ))
+    // el next hace saltar al siguiente middleware, definidos en la carpeta middleware. 
+    // Sin argumento para que no crea que hay un error, ya que los errores están definidos
+    .then(() => next())
+    // .catch(console.error)
+    .catch(next);
+  // next();
 };
 
 
@@ -77,7 +99,6 @@ module.exports = (app, next) => {
    * @code {403} si no es ni admin
    */
   app.get('/users', requireAdmin, getUsers);
-
   /**
    * @name GET /users/:uid
    * @description Obtiene información de una usuaria
@@ -95,6 +116,7 @@ module.exports = (app, next) => {
    * @code {404} si la usuaria solicitada no existe
    */
   app.get('/users/:uid', requireAuth, (req, resp) => {
+    getUserByIdOrEmail(req, resp, next)
   });
 
   /**
@@ -117,6 +139,7 @@ module.exports = (app, next) => {
    * @code {403} si ya existe usuaria con ese `email`
    */
   app.post('/users', requireAdmin, (req, resp, next) => {
+    createNewUser(req, resp, next)
   });
 
   /**
