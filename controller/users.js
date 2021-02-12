@@ -123,17 +123,14 @@ module.exports = {
     const user = await User.findOne(getIdOrEmail(uidToUpdate)).exec();
 
     if (!isAdmin(req) && (uid !== user.id)) {
-      console.log('hola')
       return next(403)
     }
 
     if ((uid === user.id) && req.body.roles) {
-      console.log('chao')
       return next(403)
     }
 
-    if(!email && !password && !roles){
-      console.log('holichao')
+    if (!email && !password && !roles) {
       return next(400)
     }
 
@@ -153,6 +150,37 @@ module.exports = {
 
   // DELETE AN USER
   deleteUser: async (req, resp, next) => {
+    const uidToUpdate = req.params.uid;
+    const { authorization } = req.headers;
+
+    const [type, token] = authorization.split(' ');
+    const decodedToken = jwt.decode(token, { complete: true });
+    const uid = decodedToken.payload.uid // Connected user id
+
+    const user = await User.findOne(getIdOrEmail(uidToUpdate)).exec();
+
+    if (!isAdmin(req) && (uid !== user.id)) {
+      return next(403)
+    }
+
+    if ((uid === user.id) && req.body.roles) {
+      return next(403)
+    }
+
+    if (!user) {
+      return next(404)
+    }
+
+    User.deleteOne(getIdOrEmail(uidToUpdate))
+      .then(data => console.log('Se borró el usaurio: ', user.email))
+      .catch(error => console.log('No se pudo borrar'))
+
+    return resp.json({
+      id: user._id,
+      email: user.email,
+      roles: user.roles,
+      admin: user.roles.get('admin')
+    })
 
   }
 };

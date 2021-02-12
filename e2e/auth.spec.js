@@ -49,5 +49,6 @@ describe('POST /auth', () => {
         return resp.json();
       })
       .then((json) => expect(json.email).toBe(config.adminEmail))
-  ));
+  ))
+    // }, 120000);
 });
