@@ -3,11 +3,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { isAdmin } = require('../middleware/auth')
+const { getIdOrEmail, pagination } = require('../utils');
 
 module.exports = {
   // GETTING USERS
   getUsers: async (req, resp, next) => {
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 5 } = req.query;
 
     // debe ser asíncrona. find() puede usarse como promesa
     try {
@@ -28,6 +29,10 @@ module.exports = {
         }
         users.push(user)
       })
+
+      const uri = `http://127.0.0.1/users/?`
+      resp.set('Link', pagination(uri, count, page, limit))
+      console.log('RESP', resp.get('Link'))
 
       resp.json({
         users,
@@ -184,15 +189,3 @@ module.exports = {
 
   }
 };
-
-// IDENTIFY IF INPUT IS EMAIL OR ID
-const getIdOrEmail = (input) => {
-  if (input.indexOf('@') > 0) {
-    return ({ email: input })
-  }
-  if (!mongoose.Types.ObjectId.isValid(input)) {
-    throw new Error('ID inválido')
-  }
-  return ({ _id: input })
-
-}
