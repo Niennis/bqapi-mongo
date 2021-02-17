@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Product = require('../models/Product');
 const { isAdmin } = require('../middleware/auth')
-const { pagination } = require('../utils/index')
+const { pagination, getIdOrEmail } = require('../utils/index')
 
 module.exports = {
 
@@ -30,10 +30,10 @@ module.exports = {
         }
         products.push(product)
       })
-      
+
       const uri = `http://127.0.0.1/products/?`
-      resp.set('Link', pagination(uri, count, page, limit))        
-      
+      resp.set('Link', pagination(uri, count, page, limit))
+
       resp.json({
         products,
         totalPages: Math.ceil(count / limit),
@@ -44,12 +44,93 @@ module.exports = {
     }
   },
 
-  getProductsById: (req, resp, next) => {
+  getProductsById: async (req, resp, next) => {
+    const uid = req.params.uid;
 
+    const { authorization } = req.headers;
+    // console.log('AUTHO', authorization)
+    if (!authorization) {
+      return next(401);
+    }
+
+    if (uid.findOne('@') > 0) {
+      resp.send('ID inválida')
+    }
+
+    try {
+      const product = await Product.findOne(getIdOrEmail(uid)).exec();
+      return resp.json({
+        id: product._id,
+        name: product.name,
+        price: product.price,
+        img: product.image,
+        type: product.type,
+        dateEntry: product.dateEntry
+      })
+
+    } catch (error) {
+      console.log(error.message)
+      if (error.message === 'ID inválido') {
+        // return resp.send('ID inválido')
+        return resp.status(404).json({
+          statusCode: 404,
+          message: 'ID inválido'
+        });
+      }
+      return resp.status(404).json({
+        statusCode: 404,
+        message: 'ID inválido'
+      });
+      // return resp.send('Email inválido')
+    }
   },
 
-  postProducts: (req, resp, next) => {
+  postProducts: async (req, resp, next) => {
+    const { authorization } = req.headers;
+    if (!authorization) {
+      return next(401);
+    }
 
+    const { name, price, image, type } = req.body
+
+    if (!name || !price) {
+      return next(400);
+    }
+
+    const date = new Date;
+
+    const newProduct = new Product({
+      name: name,
+      price: price,
+      image: image,
+      type: type,
+      dateEntry: date
+    })
+
+    try {
+      await Product.findOne({ name: name }, (err, product) => {
+        if (!product) {
+          Product.create(newProduct)
+          resp.send({
+            id: newProduct._id,
+            name: newProduct.name,
+            price: newProduct.price,
+            image: newProduct.image,
+            type: newProduct.type,
+            dateEntry: newProduct.dateEntry
+          })
+          // next()
+        } else {
+          next(403)
+        }
+      })
+    }
+    catch (error) {
+      return resp.status(404).json({
+        statusCode: 404,
+        message: error.message
+      });
+    }
   },
 
   updateProducts: (req, resp, next) => {
