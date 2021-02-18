@@ -163,6 +163,29 @@ module.exports = {
   },
 
   deleteProducts: async (req, resp, next) => {
-  
+    const uidToUpdate = req.params.productId;
+    const { authorization } = req.headers;
+
+    if (!authorization) {
+      return next(401)
+    }
+
+    const product = await Product.findOne(getIdOrEmail(uidToUpdate)).exec();
+    if (!product) {
+      return next(404)
+    }
+
+    Product.deleteOne(getIdOrEmail(uidToUpdate))
+      .then(data => console.log('Se borró el producto: ', product._id, product.name))
+      .catch(error => console.log('No se pudo borrar', error.message))
+
+    return resp.json({
+      id: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      type: product.type,
+      dateEntry: product.dateEntry
+    })
   },
 };
