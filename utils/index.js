@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 
 // IDENTIFY IF INPUT IS EMAIL OR ID
 module.exports.getIdOrEmail = (input) => {
