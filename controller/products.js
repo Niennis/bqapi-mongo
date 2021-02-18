@@ -45,15 +45,15 @@ module.exports = {
   },
 
   getProductsById: async (req, resp, next) => {
-    const uid = req.params.uid;
-
+    const uid = req.params.productId;
+    console.log(req.params)
     const { authorization } = req.headers;
     // console.log('AUTHO', authorization)
     if (!authorization) {
       return next(401);
     }
 
-    if (uid.findOne('@') > 0) {
+    if (uid.indexOf('@') > 0) {
       resp.send('ID inválida')
     }
 
@@ -133,11 +133,36 @@ module.exports = {
     }
   },
 
-  updateProducts: (req, resp, next) => {
+  updateProducts: async (req, resp, next) => {
+    const uidToUpdate = req.params.productId;
+    const { name, price, image, type } = req.body
 
+    if (!name && !price && !image && !type) {
+      return next(400)
+    }
+
+    const product = await Product.findOne(getIdOrEmail(uidToUpdate)).exec();
+    if (!product) {
+      return next(404)
+    }
+
+    product.name = name || product.name;
+    product.price = price || product.price;
+    product.image = image || product.image;
+    product.type = type || product.type;
+    product.save()
+
+    return resp.json({
+      id: product._id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      type: product.type,
+      dateEntry: product.dateEntry
+    })
   },
 
-  deleteProducts: (req, resp, next) => {
-
+  deleteProducts: async (req, resp, next) => {
+  
   },
 };
