@@ -2,6 +2,14 @@ const {
   requireAuth,
 } = require('../middleware/auth');
 
+const {
+  getOrders,
+  getOrderById,
+  newOrder,
+  updateOrder,
+  deleteOrder
+} = require('../controller/orders')
+
 /** @module orders */
 module.exports = (app, nextMain) => {
   /**
@@ -31,6 +39,7 @@ module.exports = (app, nextMain) => {
    * @code {401} si no hay cabecera de autenticación
    */
   app.get('/orders', requireAuth, (req, resp, next) => {
+    getOrders(req, resp, next)
   });
 
   /**
