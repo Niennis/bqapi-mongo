@@ -30,3 +30,16 @@ module.exports.pagination = (uri, count, page, limit) => {
 
 // }
 // return link
+
+
+module.exports.arrProducts = (arr) => {
+  let products = [];
+  arr.forEach(item => {
+    let eachProduct = {
+      qty: item.qty,
+      product: item.product
+    }
+    products.push(eachProduct)
+  })
+  return products
+}
