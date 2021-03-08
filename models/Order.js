@@ -28,7 +28,7 @@ const orderScheme = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  dataProcessed: {
+  dateProcessed: {
     type: Date,
     required: false,
   }
