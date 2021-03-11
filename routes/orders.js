@@ -64,6 +64,7 @@ module.exports = (app, nextMain) => {
    * @code {404} si la orden con `orderId` indicado no existe
    */
   app.get('/orders/:orderId', requireAuth, (req, resp, next) => {
+    getOrderById(req, resp, next)
   });
 
   /**

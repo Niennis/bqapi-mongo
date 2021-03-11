@@ -47,6 +47,31 @@ module.exports = {
   },
 
   getOrderById: async (req, resp, next) => {
+    const { orderId } = req.params;
+
+    if (!orderId) {
+      return next(404)
+    }
+
+    try {
+      const order = await Order.findOne({ _id: orderId }).exec()
+
+      return resp.json({
+        id: order._id,
+        userId: order.userId,
+        client: order.client,
+        products: arrProducts(order.products),
+        status: order.status,
+        dateEntry: order.dateEntry,
+        dateProcessed: order.dateProcessed
+      })
+
+    } catch (err) {
+      console.log(err.message)
+      return resp.json({
+        error: 'ID not found'
+      });
+    }
 
   },
 
@@ -55,11 +80,11 @@ module.exports = {
     if (!products) {
       return next(400)
     }
-    
+
     if (!userId) {
       return next(400)
     }
-    
+
     let order = new Order({
       userId: userId,
       client: client,
