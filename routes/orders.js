@@ -93,6 +93,7 @@ module.exports = (app, nextMain) => {
    * @code {401} si no hay cabecera de autenticación
    */
   app.post('/orders', requireAuth, (req, resp, next) => {
+    newOrder(req, resp, next)
   });
 
   /**

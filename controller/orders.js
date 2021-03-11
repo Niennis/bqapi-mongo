@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Order = require('../models/Order');
 const { isAdmin } = require('../middleware/auth')
-const { pagination, getIdOrEmail } = require('../utils/index')
+const { pagination, getIdOrEmail, arrProducts } = require('../utils/index')
 
 module.exports = {
 
@@ -22,19 +22,19 @@ module.exports = {
 
       ordersAndPages.forEach(el => {
         let order = {
-          userId: el._id,
+          id: el._id,
+          userId: el.userId,
           client: el.client,
           products: arrProducts(el.products),
           status: el.status,
-          dataEntry: el.dataEntry,
-          dataProcessed: el.dataProcessed
+          dateEntry: el.dateEntry,
+          dateProcessed: el.dateProcessed
         }
         orders.push(order)
       })
 
       const uri = `http://127.0.0.1/orders/?`
       resp.set('Link', pagination(uri, count, page, limit))
-      console.log('RESP', resp.get('Link'))
 
       resp.json({
         orders,
@@ -51,6 +51,39 @@ module.exports = {
   },
 
   newOrder: async (req, resp, next) => {
+    const { client, products, userId } = req.body;
+    if (!products) {
+      return next(400)
+    }
+    
+    if (!userId) {
+      return next(400)
+    }
+    
+    let order = new Order({
+      userId: userId,
+      client: client,
+      products: products,
+      status: 'pending',
+      dateEntry: new Date
+    })
+
+    try {
+      Order.create(order)
+      resp.send({
+        orderId: order._id,
+        userId: order.userId,
+        client: order.client,
+        products: order.products,
+        status: order.status,
+        dateEntry: order.dateEntry
+      })
+    } catch (err) {
+      return resp.json({
+        statusCode: err.status,
+        message: err.message
+      });
+    }
 
   },
 
@@ -64,14 +97,3 @@ module.exports = {
 
 }
 
-
-const arrProducts = (arr) => {
-  let products = [];
-  arr.forEach(el => {
-    let prod = {
-    qty: el.qty,
-    product: el.product
-    }
-    products.ṕush(prod)
-  })
-}
