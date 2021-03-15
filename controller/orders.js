@@ -49,10 +49,6 @@ module.exports = {
   getOrderById: async (req, resp, next) => {
     const { orderId } = req.params;
 
-    if (!orderId) {
-      return next(404)
-    }
-
     try {
       const order = await Order.findOne({ _id: orderId }).exec()
 
@@ -68,9 +64,7 @@ module.exports = {
 
     } catch (err) {
       console.log(err.message)
-      return resp.json({
-        error: 'ID not found'
-      });
+      return next(404)
     }
 
   },
@@ -113,7 +107,44 @@ module.exports = {
   },
 
   updateOrder: async (req, resp, next) => {
+    const { orderId } = req.params;
+    const { userId, client, products, status } = req.body
 
+    if (!userId && !client && !products && !status) {
+      return next(400)
+    }
+
+    const typeOfStatus = Order.schema.path('status').enumValues
+
+    if (status && !typeOfStatus.includes(status)) {
+      return next(400)
+    }
+
+    const dateProcessed = new Date
+
+    try {
+      const order = await Order.findOne({ _id: orderId }).exec();
+
+      order.userId = userId || order.userId;
+      order.client = client || order.client;
+      order.products = products || order.products;
+      order.status = status || order.status
+      order.dateProcessed = status === 'delivered' ? dateProcessed : order.dateProcessed;
+      order.save();
+
+      resp.json({
+        id: order._id,
+        userId: order.userId,
+        client: order.client,
+        products: order.products,
+        status: order.status,
+        dateEntry: order.dateEntry,
+        dateProcessed: order.dateProcessed
+      })
+    } catch (err) {
+      console.log(err.message)
+      return next(404)
+    }
   },
 
   deleteOrder: async (req, resp, next) => {
