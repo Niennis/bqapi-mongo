@@ -148,7 +148,25 @@ module.exports = {
   },
 
   deleteOrder: async (req, resp, next) => {
+    const { orderId } = req.params;
+    
+    try {
+      const order = await Order.findOne({ _id: orderId }).exec();
+      Order.deleteOne({ _id: orderId })
 
+      resp.json({
+        id: order._id,
+        userId: order.userId,
+        client: order.client,
+        products: arrProducts(order.products),
+        status: order.status,
+        dateEntry: order.dateEntry,
+        dateProcessed: order.dateProcessed
+      })
+    } catch (err) {
+      console.log(err.message)
+      return next(404)
+    }
   }
 
 }

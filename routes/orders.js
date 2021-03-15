@@ -151,6 +151,7 @@ module.exports = (app, nextMain) => {
    * @code {404} si el producto con `orderId` indicado no existe
    */
   app.delete('/orders/:orderId', requireAuth, (req, resp, next) => {
+    deleteOrder(req, resp, next)
   });
 
   nextMain();
