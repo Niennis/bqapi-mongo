@@ -34,7 +34,7 @@ module.exports = {
       resp.set('Link', pagination(uri, count, page, limit))
       console.log('RESP', resp.get('Link'))
 
-      resp.json({
+      return resp.json({
         users,
         totalPages: Math.ceil(count / limit),
         currentPage: page
@@ -42,6 +42,7 @@ module.exports = {
     } catch (err) {
       console.log(err.message)
     }
+    return next()
   },
 
   // GET ONE USER BY EMAIL OR ID
