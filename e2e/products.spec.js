@@ -155,12 +155,7 @@ describe('PUT /products/:productid', () => {
   ));
 });
 
-<<<<<<< HEAD
 describe('DELETE /products/:productid', () => {
-=======
-
-describe.skip('DELETE /products/:productid', () => {
->>>>>>> cdd0120e757150b08a95069fda067214dc406e75
   it('should fail with 401 when no auth', () => (
     fetch('/products/xxx', { method: 'DELETE' })
       .then((resp) => expect(resp.status).toBe(401))

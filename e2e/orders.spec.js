@@ -89,12 +89,7 @@ describe('POST /orders', () => {
   ));
 });
 
-<<<<<<< HEAD
 describe('GET /orders', () => {
-=======
-
-describe.skip('GET /orders', () => {
->>>>>>> cdd0120e757150b08a95069fda067214dc406e75
   it('should fail with 401 when no auth', () => (
     fetch('/orders')
       .then((resp) => expect(resp.status).toBe(401))
@@ -193,12 +188,7 @@ describe.skip('GET /orders', () => {
   ));
 });
 
-<<<<<<< HEAD
 describe('GET /orders/:orderId', () => {
-=======
-
-describe.skip('GET /orders/:orderId', () => {
->>>>>>> cdd0120e757150b08a95069fda067214dc406e75
   it('should fail with 401 when no auth', () => (
     fetch('/orders/xxx')
       .then((resp) => expect(resp.status).toBe(401))
@@ -276,12 +266,7 @@ describe.skip('GET /orders/:orderId', () => {
   ));
 });
 
-<<<<<<< HEAD
 describe('PUT /orders/:orderId', () => {
-=======
-
-describe.skip('PUT /orders/:orderId', () => {
->>>>>>> cdd0120e757150b08a95069fda067214dc406e75
   it('should fail with 401 when no auth', () => (
     fetch('/orders/xxx', { method: 'PUT' })
       .then((resp) => expect(resp.status).toBe(401))
@@ -459,12 +444,7 @@ describe.skip('PUT /orders/:orderId', () => {
   ));
 });
 
-<<<<<<< HEAD
 describe('DELETE /orders/:orderId', () => {
-=======
-
-describe.skip('DELETE /orders/:orderId', () => {
->>>>>>> cdd0120e757150b08a95069fda067214dc406e75
   it('should fail with 401 when no auth', () => (
     fetch('/orders/xxx', { method: 'DELETE' })
       .then((resp) => expect(resp.status).toBe(401))
