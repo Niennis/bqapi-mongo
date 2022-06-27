@@ -20,9 +20,7 @@ module.exports = (app, nextMain) => {
    * @auth No requiere autenticación
    */
   app.post('/auth', async (req, resp, next) => {
-    console.log('AUN NO SE CONECTA')
     const { email, password } = req.body;
-    console.log('email', req.body)
 
     if (!email || !password) {
       return next(400);
@@ -43,8 +41,10 @@ module.exports = (app, nextMain) => {
       // en mongo se crea una _id automáticamente
       return resp.json({
         token: jwt.sign({ uid: user._id }, secret),
+        id: user._id,
+        email: email
       });
-    } catch (err) { console.log('ELERROR', err) }
+    } catch (err) { console.log('Error:', err) }
     // next();
   });
 
