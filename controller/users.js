@@ -12,7 +12,6 @@ module.exports = {
 
     // debe ser asíncrona. find() puede usarse como promesa
     try {
-      console.log('ENTRANDO AL TRY')
       const usersAndPages = await User.find()
         .limit(limit * 1)
         .skip((page - 1) * limit)
@@ -25,15 +24,13 @@ module.exports = {
         let user = {
           id: el._id,
           email: el.email,
-          roles: el.roles.keys(),
-          admin: el.roles.get('admin')
+          roles: el.roles
         }
         users.push(user)
       })
 
       const uri = `http://127.0.0.1/users/?`
       resp.set('Link', pagination(uri, count, page, limit))
-      console.log('RESP', resp.get('Link'))
 
       return resp.json({
         users,
@@ -41,7 +38,7 @@ module.exports = {
         currentPage: page
       });
     } catch (err) {
-      console.log('SERÁ ESTO???', err.message)
+      console.log(err.message)
     }
     return next()
   },
@@ -61,8 +58,7 @@ module.exports = {
       return resp.json({
         id: user._id,
         email: user.email,
-        roles: user.roles,
-        admin: user.roles.get('admin')
+        roles: user.roles
       })
 
     } catch (error) {
@@ -107,8 +103,7 @@ module.exports = {
         resp.send({
           id: newUser._id,
           email: newUser.email,
-          roles: newUser.roles,
-          admin: newUser.roles.admin
+          roles: newUser.roles
         })
       } else {
         next(403)
@@ -149,8 +144,7 @@ module.exports = {
     return resp.json({
       id: user._id,
       email: user.email,
-      roles: user.roles,
-      admin: user.roles.get('admin')
+      roles: user.roles
     })
 
   },
@@ -185,8 +179,7 @@ module.exports = {
     return resp.json({
       id: user._id,
       email: user.email,
-      roles: user.roles,
-      admin: user.roles.get('admin')
+      roles: user.roles
     })
 
   }
