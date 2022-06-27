@@ -21,12 +21,12 @@ module.exports = {
       const products = []
       productsAndPages.forEach(el => {
         let product = {
-          ID: el._id,
-          Name: el.name,
-          Price: el.price,
-          Image: el.image,
-          Type: el.type,
-          Date: el.dateEntry
+          id: el._id,
+          name: el.name,
+          price: el.price,
+          image: el.image,
+          type: el.type,
+          date: el.dateEntry
         }
         products.push(product)
       })
