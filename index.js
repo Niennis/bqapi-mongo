@@ -5,21 +5,28 @@ const authMiddleware = require('./middleware/auth');
 const errorHandler = require('./middleware/error');
 const routes = require('./routes');
 const pkg = require('./package.json');
+const cors=require('cors')
 
 const { port, dbUrl, secret } = config;
 const app = express();
 
+const corsOptions = {
+  exposedHeaders: 'Link'
+}
+
 // TODO: Conexión a la Base de Datos (MongoDB o MySQL)
+console.log('dburl', dbUrl)
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-  .then((db) => console.log('connected to db'))
-  .catch(e => console.log('EL ERROR', e))
+  .then((db) => console.log('Connected to db'))
+  .catch(e => console.log('Error:', e))
 
 // mongoose.set('useFindAndModify', false)
 app.set('config', config);
 app.set('pkg', pkg);
+app.use(cors(corsOptions));
 
 // parse application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
@@ -28,7 +35,7 @@ app.use(authMiddleware(secret));
 
 // Registrar rutas
 routes(app, (err) => {
-  console.log('Connected to mongodb')
+  console.log('Routes')
   if (err) {
     throw err;
   }
