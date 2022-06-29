@@ -8,7 +8,7 @@ const { pagination, getIdOrEmail, arrProducts } = require('../utils/index')
 module.exports = {
 
   getOrders: async (req, resp, next) => {
-    const { page = 1, limit = 5 } = req.query;
+    const { page = 1, limit = 1000 } = req.query;
 
     try {
       const ordersAndPages = await Order.find()
