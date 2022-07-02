@@ -48,7 +48,6 @@ module.exports = {
     const uid = req.params.productId;
     console.log(req.params)
     const { authorization } = req.headers;
-    // console.log('AUTHO', authorization)
     if (!authorization) {
       return next(401);
     }
@@ -107,10 +106,9 @@ module.exports = {
       type: type,
       dateEntry: date
     })
-    console.log('NEW PRODUCT', newProduct);
+    
     // try {
       await Product.findOne({ name: name }, (err, product) => {
-        console.log(product)
         if (!product) {
           Product.create(newProduct)
           resp.send({
@@ -121,11 +119,11 @@ module.exports = {
             type: newProduct.type,
             dateEntry: newProduct.dateEntry
           })
-          // next()
         } else {
           next(403)
         }
       })
+      next()
     // }
     // catch (error) {
     //   return resp.status(404).json({
