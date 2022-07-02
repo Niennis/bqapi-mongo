@@ -8,7 +8,7 @@ const { getIdOrEmail, pagination } = require('../utils');
 module.exports = {
   // GETTING USERS
   getUsers: async (req, resp, next) => {
-    const { page = 1, limit = 5 } = req.query;
+    const { page = 1, limit = 1000 } = req.query;
 
     // debe ser asíncrona. find() puede usarse como promesa
     try {
