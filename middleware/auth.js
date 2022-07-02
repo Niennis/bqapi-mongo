@@ -38,7 +38,7 @@ module.exports.isAuthenticated = (req) => (
 
 module.exports.isAdmin = (req) => (
   // TODO: decidir por la informacion del request si la usuaria es admin
-  req.headers.user.roles.get('admin') ? true : false
+  req.headers.user.roles.admin
 );
 
 module.exports.requireAuth = (req, resp, next) => (
