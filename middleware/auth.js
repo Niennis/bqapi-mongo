@@ -3,8 +3,7 @@ const User = require('../models/User');
 
 module.exports = (secret) => (req, resp, next) => {
   const { authorization } = req.headers;
-  console.log('REQ.HEADERS', req.headers, authorization)
-  console.log('AUTHORIZATION', authorization)
+  // console.log('HEADERS middle', req.headers, authorization)
   if (!authorization) {
     return next();
   }

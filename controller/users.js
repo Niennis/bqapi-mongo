@@ -9,7 +9,7 @@ module.exports = {
   // GETTING USERS
   getUsers: async (req, resp, next) => {
     const { page = 1, limit = 100 } = req.query;
-    
+
     const { authorization } = req.headers;
     if (!authorization) {
       return next(401);
@@ -89,6 +89,7 @@ module.exports = {
     if (!authorization) {
       return next(401);
     }
+    console.log('AUTHO users', authorization)
 
     const { email, password, roles } = req.body
 
@@ -102,19 +103,23 @@ module.exports = {
       roles: roles
     })
 
-    await User.findOne({ email: email }, (err, user) => {
+    try {
+      const user = await User.findOne({ email: email })
+      // , (err, user) => {
       if (!user) {
         User.create(newUser)
-        resp.send({
+        return resp.send({
           id: newUser._id,
           email: newUser.email,
           roles: newUser.roles
         })
       } else {
-        next(403)
+        return next(403)
+        // }
       }
-    })
-    next()
+      // )
+    } catch (err) { console.log('err del catch', err) }
+    // next()
   },
 
   // UPDATE AN EXISTING USER
