@@ -107,11 +107,11 @@ module.exports = {
       dateEntry: date
     })
     
-    // try {
+    try {
       await Product.findOne({ name: name }, (err, product) => {
         if (!product) {
           Product.create(newProduct)
-          resp.send({
+          return resp.send({
             id: newProduct._id,
             name: newProduct.name,
             price: newProduct.price,
@@ -120,17 +120,17 @@ module.exports = {
             dateEntry: newProduct.dateEntry
           })
         } else {
-          next(403)
+          return next(403)
         }
       })
-      next()
-    // }
-    // catch (error) {
-    //   return resp.status(404).json({
-    //     statusCode: 404,
-    //     message: error.message
-    //   });
-    // }
+      // next()
+    }
+    catch (error) {
+      return resp.status(404).json({
+        statusCode: 404,
+        message: error.message
+      });
+    }
   },
 
   updateProducts: async (req, resp, next) => {
