@@ -3,6 +3,8 @@ const User = require('../models/User');
 
 module.exports = (secret) => (req, resp, next) => {
   const { authorization } = req.headers;
+  console.log('REQ.HEADERS', req.headers, authorization)
+  console.log('AUTHORIZATION', authorization)
   if (!authorization) {
     return next();
   }
@@ -20,9 +22,9 @@ module.exports = (secret) => (req, resp, next) => {
     }
     // TODO: Verificar identidad del usuario usando `decodeToken.uid`
     User.findOne({ _id: decodedToken.uid }, (err, user) => {
-      console.log('USER', user)
+      console.log('middleware', user)
       if (err) { 
-        console.log('EL ERROR 500') 
+        console.log('EL ERROR 500', err) 
         return next(500, err) 
       }
       req.headers.user = user
@@ -38,7 +40,7 @@ module.exports.isAuthenticated = (req) => (
 
 module.exports.isAdmin = (req) => (
   // TODO: decidir por la informacion del request si la usuaria es admin
-  req.headers.user.roles.admin
+  req.headers.user.roles.get('admin') ? true : false
 );
 
 module.exports.requireAuth = (req, resp, next) => (
