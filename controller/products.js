@@ -106,6 +106,7 @@ module.exports = {
       type: type,
       dateEntry: date
     })
+    console.log('api newproduct', newProduct.price)
     
     try {
       await Product.findOne({ name: name }, (err, product) => {
@@ -126,10 +127,11 @@ module.exports = {
       // next()
     }
     catch (error) {
-      return resp.status(404).json({
-        statusCode: 404,
-        message: error.message
-      });
+      console.log('err del catch', error)
+      // return resp.status(404).json({
+      //   statusCode: 404,
+      //   message: error.message
+      // });
     }
   },
 

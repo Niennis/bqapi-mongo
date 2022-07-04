@@ -21,7 +21,6 @@ module.exports = (secret) => (req, resp, next) => {
     }
     // TODO: Verificar identidad del usuario usando `decodeToken.uid`
     User.findOne({ _id: decodedToken.uid }, (err, user) => {
-      console.log('middleware', user)
       if (err) { 
         console.log('EL ERROR 500', err) 
         return next(500, err) 
