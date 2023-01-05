@@ -17,7 +17,6 @@ const corsOptions = {
 // TODO: Conexión a la Base de Datos (MongoDB o MySQL)
 console.log('dburl', dbUrl)
 mongoose.connect(dbUrl, {
-  connectTimeoutMS: 10000,
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
