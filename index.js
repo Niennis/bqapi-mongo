@@ -15,8 +15,8 @@ const corsOptions = {
 }
 
 // TODO: Conexión a la Base de Datos (MongoDB o MySQL)
-console.log('dburl', dbUrl)
-mongoose.connect(dbUrl, {
+console.log('dburl', process.env.DB_URL)
+mongoose.connect(process.env.DB_URL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
