@@ -27,7 +27,6 @@ const initAdminUser = (app, next) => {
   };
 
   // TODO: crear usuaria admin
-  console.log(adminUser)
   User.findOne({ email: adminEmail })
     .then(user => (  // si es null, queremos crear al usuario, si no, queremos comprobar que la contraseña es válida
       (!user)
