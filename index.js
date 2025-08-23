@@ -16,7 +16,7 @@ const corsOptions = {
 
 // TODO: Conexión a la Base de Datos (MongoDB o MySQL)
 console.log('dburl', process.env.DB_URL)
-mongoose.connect('mongodb+srv://admin:12345@cluster0.spdyy.mongodb.net/?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://admin:12345@cluster0.wmvjvke.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
