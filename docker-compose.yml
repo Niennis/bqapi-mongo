@@ -23,7 +23,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 8080
-      DB_URL: mongodb+srv://admin:12345@cluster0.spdyy.mongodb.net/?retryWrites=true&w=majority #mongodb://root:example@db:27017/bq?authSource=admin # 
+      DB_URL: mongodb+srv://admin:12345@cluster0.wmvjvke.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0 #mongodb://root:example@db:27017/bq?authSource=admin # 
       JWT_SECRET: xxxxxxxx
       ADMIN_EMAIL: admin@localhost
       ADMIN_PASSWORD: changeme
