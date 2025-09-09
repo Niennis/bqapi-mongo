@@ -40,7 +40,10 @@ module.exports = (app, nextMain) => {
       }
       // en mongo se crea una _id automáticamente
       return resp.json({
-        token: jwt.sign({ uid: user._id }, secret),
+        token: jwt.sign(
+          { uid: user._id, email: user.email },
+          secret,
+          { expiresIn: "1d" }),
         id: user._id,
         email: email
       });
