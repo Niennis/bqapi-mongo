@@ -30,13 +30,13 @@ module.exports = (app, nextMain) => {
     try {
       const user = await User.findOne({ email: req.body.email })
       if (!user) {
-        return next(404)
+        return next(404);
       }
 
       const matches = await bcrypt.compare(password, user.password);
       if (!matches) {
         // si no coincide, no autorizado
-        return next(404)
+        return next(404);
       }
       // en mongo se crea una _id automáticamente
       return resp.json({

@@ -1,18 +1,18 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const config = require('./config');
 const authMiddleware = require('./middleware/auth');
 const errorHandler = require('./middleware/error');
 const routes = require('./routes');
 const pkg = require('./package.json');
-const cors = require('cors')
 
 const { port, dbUrl, secret } = config;
 const app = express();
 
 const allowedOrigins = [
-  "https://bakequeen.vercel.app", // frontend en Vercel
-  "http://localhost:3000"         // para desarrollo local
+  'https://bakequeen.vercel.app', // frontend en Vercel
+  'http://localhost:3000', // para desarrollo local
 ];
 
 const corsOptions = {
